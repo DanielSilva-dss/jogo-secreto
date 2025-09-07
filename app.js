@@ -12,17 +12,26 @@ function inicializarFirebase() {
     try {
         console.log("Iniciando Firebase...");
         
-        // Verifica se as configurações estão disponíveis
-        if (!window.firebaseConfig || !window.firebaseConfig.apiKey) {
-            console.error("Configuração do Firebase não encontrada:", window.firebaseConfig);
-            throw new Error("Configuração do Firebase não encontrada");
+        // Configuração DIRETA das variáveis de ambiente do Vercel
+        const firebaseConfig = {
+            apiKey: process.env.FIREBASE_API_KEY,
+            authDomain: process.env.FIREBASE_AUTH_DOMAIN,
+            projectId: process.env.FIREBASE_PROJECT_ID,
+            storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
+            messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
+            appId: process.env.FIREBASE_APP_ID
+        };
+
+        console.log("Configuração carregada:", firebaseConfig.projectId);
+
+        // Verifica se tem pelo menos a API key
+        if (!firebaseConfig.apiKey) {
+            throw new Error("Configuração do Firebase não encontrada nas variáveis de ambiente");
         }
-        
-        console.log("Configuração encontrada, inicializando...");
         
         // Verifica se o Firebase já foi inicializado
         if (!firebase.apps.length) {
-            firebase.initializeApp(window.firebaseConfig);
+            firebase.initializeApp(firebaseConfig);
             console.log("Firebase inicializado com sucesso!");
         }
         
