@@ -1,16 +1,8 @@
 // app.js
 
-// --- INÍCIO: CÓDIGO DE INICIALIZAÇÃO DO FIREBASE---
-
-// Configuração do Firebase
-const firebaseConfig = {
-    apiKey: "AIzaSyAT0xzVpU1Rh29m5QFUf0D9ob4tTsloIe8",
-    authDomain: "jogo-numero-secreto-ranking.firebaseapp.com",
-    projectId: "jogo-numero-secreto-ranking",
-    storageBucket: "jogo-numero-secreto-ranking.firebasestorage.app",
-    messagingSenderId: "484416436213",
-    appId: "1:484416436213:web:a1f9dbea9529f44cde12bc"
-};
+// --- CÓDIGO DE INICIALIZAÇÃO DO FIREBASE ---
+// --- IMPORTAÇÃO DA CONFIGURAÇÃO DO FIREBASE ---
+import { firebaseConfig } from './firebase-config.js';
 
 // Inicializar Firebase
 firebase.initializeApp(firebaseConfig);
