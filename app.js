@@ -10,29 +10,33 @@ let rankingCol;
 // Inicialização do Firebase
 function inicializarFirebase() {
     try {
+        console.log("=== DEBUG AVANÇADO FIREBASE ===");
+        console.log("Firebase global:", typeof firebase);
+        console.log("Firestore global:", typeof firebase.firestore);
+        console.log("Configuração completa:", window.firebaseConfig);
+        console.log("Tem apiKey?", !!window.firebaseConfig?.apiKey);
+        console.log("Tem projectId?", !!window.firebaseConfig?.projectId);
+        console.log("===============================");
+        
         console.log("Iniciando Firebase...");
         
-        // Configuração DIRETA das variáveis de ambiente do Vercel
-        const firebaseConfig = {
-            apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-            authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-            projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-            storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
-            messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
-            appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID
-        };
-
-        console.log("Configuração carregada:", firebaseConfig.projectId);
-
-        // Verifica se tem pelo menos a API key
-        if (!firebaseConfig.apiKey) {
-            throw new Error("Configuração do Firebase não encontrada nas variáveis de ambiente");
+        // 🎯 VERIFICA se a configuração foi carregada
+        if (!window.firebaseConfig || !window.firebaseConfig.apiKey) {
+            console.warn("Configuração do Firebase não encontrada. Modo offline ativado.");
+            db = null;
+            rankingCol = null;
+            return;
         }
+
+        console.log("Configuração encontrada:", window.firebaseConfig.projectId);
         
-        // Verifica se o Firebase já foi inicializado
+        // Verifica se o Firebase já foi inicializado (compatível com v12)
         if (!firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
+            firebase.initializeApp(window.firebaseConfig);
             console.log("Firebase inicializado com sucesso!");
+        } else {
+            // Se já foi inicializado, usa a instância existente
+            console.log("Firebase já estava inicializado");
         }
         
         db = firebase.firestore();
@@ -41,7 +45,7 @@ function inicializarFirebase() {
         
     } catch (error) {
         console.error("Erro ao inicializar Firebase:", error);
-        alert("Modo offline ativado. O ranking não estará disponível.");
+        console.warn("Modo offline ativado devido ao erro.");
         
         db = null;
         rankingCol = null;
@@ -77,7 +81,7 @@ function gerarNumeroAleatorio() {
 
 // Inicializar quando a página carregar
 document.addEventListener('DOMContentLoaded', function() {
-    // AGORA inicializamos o número secreto depois que a função está declarada
+    // inicializamos o número secreto depois que a função está declarada
     numeroSecreto = gerarNumeroAleatorio();
     
     inicializarFirebase();
