@@ -28,6 +28,7 @@ body::before {
 
 .container {
     width: 80%;
+    max-width: 1100px;
     height: auto;
     display: flex;
     align-items: center;
@@ -94,8 +95,8 @@ body::before {
 
 h1 {
     font-family: 'Chakra Petch', sans-serif;
-    font-size: 72px;
-    padding-bottom: 3rem;
+    font-size: 52px;
+    padding-bottom: 2rem;
 }
 
 p,
@@ -104,7 +105,7 @@ button {
 }
 
 .texto__paragrafo {
-    font-size: 32px;
+    font-size: 26px;
     font-weight: 400;
 }
 
