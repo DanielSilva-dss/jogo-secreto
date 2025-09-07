@@ -23,9 +23,10 @@
                     <p class="texto__paragrafo"></p>
                     <p id="historico-chutes" class="texto__paragrafo"></p>
                 </div>
-                <input type="number" min="1" max="10" class="container__input">
+                <input type="number" min="1" max="100" class="container__input">
                 <div class="chute container__botoes">
                     <button onclick="verificarChute()" class="container__botao">Chutar</button>
+                    <button onclick="abrirRanking()" id="ranking" class="container__botao">Ranking</button>
                     <button onclick="reiniciarJogo()" id="reiniciar" class="container__botao" disabled>Novo jogo</button>
                 </div>
             </div>
@@ -33,27 +34,20 @@
         </div>
     </div>
 
+    <!-- Modal do Ranking -->
+    <div id="modal-ranking" class="modal-overlay" style="display: none;">
+        <div class="modal-conteudo">
+            <h2>🏆 Top 10 Jogadores 🏆</h2>
+            <ol id="lista-ranking"></ol>
+            <button onclick="fecharRanking()">Fechar</button>
+        </div>
+    </div>
 
-    <script type="module">
-    // Import the functions you need from the SDKs you need
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
-    // TODO: Add SDKs for Firebase products that you want to use
-    // https://firebase.google.com/docs/web/setup#available-libraries
+    <!-- Firebase (versão compatível com o app.js corrigido) -->
+    <script src="https://www.gstatic.com/firebasejs/12.2.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore-compat.js"></script>
 
-    // Your web app's Firebase configuration
-    const firebaseConfig = {
-        apiKey: "AIzaSyAT0xzVpU1Rh29m5QFUf0D9ob4tTsloIe8",
-        authDomain: "jogo-numero-secreto-ranking.firebaseapp.com",
-        projectId: "jogo-numero-secreto-ranking",
-        storageBucket: "jogo-numero-secreto-ranking.firebasestorage.app",
-        messagingSenderId: "484416436213",
-        appId: "1:484416436213:web:a1f9dbea9529f44cde12bc"
-    };
-
-    // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-    </script>
-
+    <!-- Seu JavaScript -->
     <script src="app.js" defer></script>
 </body>
 

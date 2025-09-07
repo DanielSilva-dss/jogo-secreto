@@ -1,9 +1,8 @@
-/* Aplica o box-sizing border-box para todos os elementos e remove margens e paddings padrão */
+/* Reset e box-sizing */
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    color: white;
 }
 
 /* Estilo para o corpo da página */
@@ -13,9 +12,11 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    color: white;
+    font-family: 'Inter', sans-serif;
 }
 
-/* Adiciona a imagem de código como plano de fundo */
+/* Imagem de fundo */
 body::before {
     background-image: url("img/code.png");
     background-repeat: no-repeat;
@@ -28,11 +29,10 @@ body::before {
     opacity: 0.4;
 }
 
-/* Estilo para o container principal */
+/* Container principal */
 .container {
     width: 80%;
     max-width: 1100px;
-    height: auto;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -46,7 +46,7 @@ body::before {
     padding: 2rem;
 }
 
-/* Estilo para a imagem da pessoa */
+/* Conteúdo interno */
 .container__conteudo {
     display: flex;
     align-items: center;
@@ -54,13 +54,12 @@ body::before {
     position: relative;
 }
 
-/* Estilo para a imagem da pessoa */
 .container__informacoes {
     flex: 1;
     padding: 3rem;
 }
 
-/* Estilo para a imagem da pessoa */
+/* Botões principais */
 .container__botao {
     border-radius: 16px;
     background: #1875E8;
@@ -70,19 +69,24 @@ body::before {
     font-weight: 700;
     border: none;
     margin-top: 2rem;
+    cursor: pointer;
 }
 
-/* Estilo para a imagem da pessoa */
+button:disabled {
+    background-color: gray;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+/* Texto */
 .container__texto {
-    margin: 16px 0 16px 0;
+    margin: 16px 0;
 }
 
-/* Estilo para o texto azul */
 .container__texto-azul {
     color: #1875E8;
 }
 
-/* Estilo para a imagem da pessoa */
 .container__input {
     width: 100%;
     height: 72px;
@@ -96,58 +100,46 @@ body::before {
     font-family: 'Inter', sans-serif;
 }
 
-/* Estilo para o container dos botões */
+/* Container de botões */
 .container__botoes {
     display: flex;
     gap: 2em;
 }
 
-/* Aplica a fonte 'Chakra Petch' para todos os títulos h1 */
+/* Títulos */
 h1 {
     font-family: 'Chakra Petch', sans-serif;
     font-size: 52px;
     padding-bottom: 2rem;
 }
 
-/* Estilo para o histórico de chutes */
+/* Histórico de chutes */
 #historico-chutes {
     font-size: 22px;
     margin-top: 1rem;
     color: #a9d6ff;
 }
 
-/* Aplica a fonte 'Inter' para todos os parágrafos e botões */
-p,
-button {
-    font-family: 'Inter', sans-serif;
-}
-
-/* Estilo para os parágrafos */
+/* Parágrafos */
 .texto__paragrafo {
     font-size: 26px;
     font-weight: 400;
 }
 
-/* Estilo para os botões */
-button:disabled {
-    background-color: gray;
-}
-
-/* Estilos para a Janela Modal do Ranking */
+/* Modal */
 .modal-overlay {
-    position: fixed; /* Fica por cima de tudo */
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.7); /* Fundo escuro semi-transparente */
+    background-color: rgba(0, 0, 0, 0.7);
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 1000; /* Garante que fique na frente */
+    z-index: 1000;
 }
 
-/* Estilo para o conteúdo da modal */
 .modal-conteudo {
     background: #041832;
     padding: 30px;
@@ -158,33 +150,27 @@ button:disabled {
     max-width: 500px;
 }
 
-/* Estilo para o título dentro da modal */
 .modal-conteudo h2 {
     font-family: 'Chakra Petch', sans-serif;
     margin-bottom: 20px;
 }
 
-/* Estilo para a lista ordenada dentro da modal */
 .modal-conteudo ol {
-    list-style-position: inside; /* Coloca os números da lista para dentro */
+    list-style-position: inside;
     text-align: left;
     margin-bottom: 20px;
 }
 
-/* Estilo para os itens da lista dentro da modal */
 .modal-conteudo li {
-    font-family: 'Inter', sans-serif;
     font-size: 18px;
     padding: 8px;
     border-bottom: 1px solid #1354A5;
 }
 
-/* Remove a borda inferior do último item da lista */
 .modal-conteudo li:last-child {
     border-bottom: none;
 }
 
-/* Estilo para o botão dentro da modal */
 .modal-conteudo button {
     border-radius: 16px;
     background: #1875E8;
@@ -195,42 +181,30 @@ button:disabled {
     cursor: pointer;
 }
 
-/* Estilos responsivos para telas menores */
+/* Responsividade */
 @media screen and (max-width: 1250px) {
-    /* Ajusta o layout do container para telas menores */
+    .container {
+        width: 95%;
+        flex-direction: column;
+    }
+
     h1 {
-        font-size: 50px;
+        font-size: 40px;
     }
 
-    /* Ajusta o histórico de chutes para telas menores */
-    #historico-chutes {
-    font-size: 22px;
-    margin-top: 1rem;
-    color: #a9d6ff;
-}
-    /* Ajusta o layout do container para telas menores */
-    .container__botao {
-        font-size: 16px;
-    }
-
-    /* Ajusta o layout do container para telas menores */
     .texto__paragrafo {
-        font-size: 24px;
+        font-size: 22px;
     }
 
-    /* Ajusta o layout do container para telas menores */
+    .container__botao {
+        font-size: 18px;
+    }
+
     .container__imagem-pessoa {
         display: none;
     }
 
-    /* Ajusta o layout do container para telas menores */
-    .container__conteudo {
-        display: block;
-        position: inherit;
-    }
-
-    /* Ajusta o layout do container para telas menores */
     .container__informacoes {
-        padding: 1rem
+        padding: 1rem;
     }
 }

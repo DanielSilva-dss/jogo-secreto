@@ -1,30 +1,27 @@
 // app.js
 
-// --- INÍCIO: CÓDIGO DE INICIALIZAÇÃO DO FIREBASE ---
-// Importante: estas funções vêm dos scripts que adicionamos no HTML.
-// O "defer" no seu <script src="app.js" defer> garante que isso funcione.
-const { initializeApp } = firebase.app;
-const { getFirestore, collection, addDoc, getDocs, query, orderBy, limit } = firebase.firestore;
+// --- INÍCIO: CÓDIGO DE INICIALIZAÇÃO DO FIREBASE---
 
-// Inicializa o Firebase com as credenciais do seu projeto
+// Configuração do Firebase
 const firebaseConfig = {
-        apiKey: "AIzaSyAT0xzVpU1Rh29m5QFUf0D9ob4tTsloIe8",
-        authDomain: "jogo-numero-secreto-ranking.firebaseapp.com",
-        projectId: "jogo-numero-secreto-ranking",
-        storageBucket: "jogo-numero-secreto-ranking.firebasestorage.app",
-        messagingSenderId: "484416436213",
-        appId: "1:484416436213:web:a1f9dbea9529f44cde12bc"
-    };
+    apiKey: "AIzaSyAT0xzVpU1Rh29m5QFUf0D9ob4tTsloIe8",
+    authDomain: "jogo-numero-secreto-ranking.firebaseapp.com",
+    projectId: "jogo-numero-secreto-ranking",
+    storageBucket: "jogo-numero-secreto-ranking.firebasestorage.app",
+    messagingSenderId: "484416436213",
+    appId: "1:484416436213:web:a1f9dbea9529f44cde12bc"
+};
 
-// Inicializa o Firebase e o Firestore
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-const rankingCol = collection(db, 'ranking'); // 'ranking' será o nome da nossa "tabela"
+// Inicializar Firebase
+firebase.initializeApp(firebaseConfig);
+
+// Firestore
+const db = firebase.firestore();
+const rankingCol = db.collection("ranking");
 
 // --- FIM: CÓDIGO DE INICIALIZAÇÃO DO FIREBASE ---
 
-
-//Variaveis
+// Variáveis
 let listaDeNumerosSorteados = [];
 let numeroMaximo = 100;
 let numeroSecreto = gerarNumeroAleatorio();
@@ -36,13 +33,13 @@ let chuteAnteriores = [];
 function exibirTextoNaTela(tag, texto) {
     let campo = document.querySelector(tag);
     campo.innerHTML = texto;
-    responsiveVoice.speak(texto, 'Brazilian Portuguese Female', {rate:1.2});
+    responsiveVoice.speak(texto, "Brazilian Portuguese Female", { rate: 1.2 });
 }
 
 // Função para exibir a mensagem inicial
 function exibirMensagemInicial() {
-    exibirTextoNaTela('h1', 'Jogo do número secreto');
-    exibirTextoNaTela('p', 'Escolha um número entre 1 e 100');
+    exibirTextoNaTela("h1", "Jogo do número secreto");
+    exibirTextoNaTela("p", "Escolha um número entre 1 e 100");
 }
 
 exibirMensagemInicial();
@@ -51,53 +48,48 @@ exibirMensagemInicial();
 function gerarNumeroAleatorio() {
     let numeroEscolhido = parseInt(Math.random() * numeroMaximo + 1);
     let quantidadeDeElementosNaLista = listaDeNumerosSorteados.length;
-    
+
     if (quantidadeDeElementosNaLista == numeroMaximo) {
         listaDeNumerosSorteados = [];
     }
-    
+
     if (listaDeNumerosSorteados.includes(numeroEscolhido)) {
         return gerarNumeroAleatorio();
     } else {
         listaDeNumerosSorteados.push(numeroEscolhido);
-        console.log(listaDeNumerosSorteados);
         return numeroEscolhido;
     }
 }
 
-// Função para verificar o número secreto na tela
+// Função para verificar o número secreto
 function verificarChute() {
-    let chute = document.querySelector('input').value;
-    console.log(chute == numeroSecreto);
+    let chute = document.querySelector("input").value;
 
-    if(!chute) {
+    if (!chute) {
         return;
     }
 
-    if (chute != '' && !chuteAnteriores.includes(chute)) {
+    if (chute != "" && !chuteAnteriores.includes(chute)) {
         chuteAnteriores.push(chute);
-        let palavraChutes = chuteAnteriores.length > 1 ? 'Seus chutes' : 'Seu chute';
-        let textoChutes = `${palavraChutes}: ${chuteAnteriores.join(', ')}`;
-        let historicoChutes = document.getElementById('historico-chutes');
-        historicoChutes.innerHTML = textoChutes; // Atualiza o histórico de chutes na tela
+        document.getElementById("historico-chutes").innerHTML = `Seus chutes: ${chuteAnteriores.join(", ")}`;
     }
 
     if (chute == numeroSecreto) {
-        exibirTextoNaTela('h1', 'Parabéns! Você acertou!');        
-        let palavraTentativa = tentativas > 1 ? 'tentativas' : 'tentativa';
+        exibirTextoNaTela("h1", "Parabéns! Você acertou!");
+        let palavraTentativa = tentativas > 1 ? "tentativas" : "tentativa";
         let textoTentativas = `Você descobriu o número secreto ${numeroSecreto} com ${tentativas} ${palavraTentativa}.`;
-        exibirTextoNaTela('p', textoTentativas); // Atualiza o parágrafo com o número de tentativas
-        document.getElementById('reiniciar').removeAttribute('disabled'); // Habilita o botão de reiniciar
+        exibirTextoNaTela("p", textoTentativas);
+        document.getElementById("reiniciar").removeAttribute("disabled");
 
-        let nomeJogador = prompt('Você entrou para o ranking! Qual é o seu nome?'); // Solicita o nome do jogador
+        let nomeJogador = prompt("Você entrou para o ranking! Qual é o seu nome?");
         if (nomeJogador) {
-            salvarPontuacao(nomeJogador, tentativas); // Salva a pontuação no Firestore
+            salvarPontuacao(nomeJogador, tentativas);
         }
     } else {
         if (chute < numeroSecreto) {
-            exibirTextoNaTela('p', 'Tente um número maior!');
+            exibirTextoNaTela("p", "Tente um número maior!");
         } else {
-            exibirTextoNaTela('p', 'Tente um número menor!');
+            exibirTextoNaTela("p", "Tente um número menor!");
         }
         tentativas++;
         limparCampo();
@@ -107,63 +99,61 @@ function verificarChute() {
 // Função para salvar a pontuação no Firestore
 async function salvarPontuacao(nome, pontuacao) {
     try {
-        const docRef = await addDoc(rankingCol, {
+        const docRef = await rankingCol.add({
             nome: nome,
             pontuacao: pontuacao,
-            timesTamp: new Date() // Guarda a data e hora do registro
+            timestamp: new Date()
         });
         console.log("Pontuação salva com ID: ", docRef.id);
-        alert('Pontuação salva com sucesso!');
+        alert("Pontuação salva com sucesso no ranking global!");
     } catch (e) {
         console.error("Erro ao salvar pontuação: ", e);
+        alert("Houve um erro ao salvar sua pontuação.");
     }
 }
 
 // Função para exibir o ranking
 async function exibirRanking() {
-    const lista = document.getElementById('ranking-lista');
-    lista.innerHTML = '<li>Carregando ranking...</li>'; // Limpa a lista antes de exibir o ranking atualizado
-
-    const rankingQuery = query(rankingCol, orderBy('pontuacao', 'asc'), limit(10));
+    const lista = document.getElementById("lista-ranking");
+    lista.innerHTML = "<li>Carregando ranking...</li>";
 
     try {
-        const querySnapshot = await getDocs(rankingQuery);
-        lista.innerHTML = ''; // Limpa a lista antes de exibir o ranking atualizado
+        const querySnapshot = await rankingCol.orderBy("pontuacao").limit(10).get();
+        lista.innerHTML = "";
 
         if (querySnapshot.empty) {
-            lista.innerHTML = '<li>Nenhum registro no ranking.</li>'; // Se não houver registros, exibe uma mensagem
+            lista.innerHTML = "<li>Nenhum registro no ranking. Seja o primeiro!</li>";
             return;
         }
+
         let posicao = 1;
-        querySnapshot.forEach((doc) => { 
+        querySnapshot.forEach((doc) => {
             const jogador = doc.data();
-            const item = document.createElement('li');
-            item.textContent = `${posicao}º - ${jogador.nome}: ${jogador.pontuacao} ${jogador.pontuacao > 1 ? 'tentativas' : 'tentativa'}`;
+            const item = document.createElement("li");
+            item.textContent = `${posicao}º: ${jogador.nome} - ${jogador.pontuacao} tentativas`;
             lista.appendChild(item);
             posicao++;
-        }); // Incrementa a posição para o próximo jogador o bloco de codigo acima
+        });
     } catch (error) {
         console.error("Erro ao buscar ranking: ", error);
-        lista.innerHTML = '<li>Erro ao carregar o ranking.</li>'; // Exibe uma mensagem de erro na lista
+        lista.innerHTML = "<li>Erro ao carregar o ranking.</li>";
     }
 }
 
-// Função para mostrar o modal de ranking
-function mostrarRanking() {
+// Funções para abrir e fechar o ranking
+function abrirRanking() {
     exibirRanking();
-    document.getElementById('modal-ranking').style.display = 'flex';
+    document.getElementById("modal-ranking").style.display = "flex";
 }
 
-// Função para fechar o modal de ranking
 function fecharRanking() {
-    document.getElementById('modal-ranking').style.display = 'none';
-
+    document.getElementById("modal-ranking").style.display = "none";
 }
 
-// Limpar o campo de entrada do número do chute
+// Função para limpar o campo de input
 function limparCampo() {
-    chute = document.querySelector('input');
-    chute.value = '';
+    let chute = document.querySelector("input");
+    chute.value = "";
 }
 
 // Função para reiniciar o jogo
@@ -172,10 +162,8 @@ function reiniciarJogo() {
     limparCampo();
     tentativas = 1;
     exibirMensagemInicial();
-    document.getElementById('reiniciar').setAttribute('disabled', 'true');
+    document.getElementById("reiniciar").setAttribute("disabled", "true");
 
     chuteAnteriores = [];
-    let historicoChutes = document.getElementById('historico-chutes');
-    historicoChutes.innerHTML = '';
+    document.getElementById("historico-chutes").innerHTML = "";
 }
-
