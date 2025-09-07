@@ -3,6 +3,7 @@ let listaDeNumerosSorteados = [];
 let numeroMaximo = 100;
 let numeroSecreto = gerarNumeroAleatorio();
 let tentativas = 1;
+let chuteAnteriores = [];
 
 
 // Função para exibir texto na tela
@@ -43,6 +44,14 @@ function verificarChute() {
     let chute = document.querySelector('input').value;
     console.log(chute == numeroSecreto);
 
+    if (chute != '' && !chuteAnteriores.includes(chute)) {
+        chuteAnteriores.push(chute);
+        let palavraChutes = chuteAnteriores.length > 1 ? 'Seus chutes' : 'Seu chute';
+        let textoChutes = `${palavraChutes}: ${chuteAnteriores.join(', ')}`;
+        let historicoChutes = document.getElementById('historico-chutes');
+        historicoChutes.innerHTML = textoChutes;
+    }
+
     if (chute == numeroSecreto) {
         exibirTextoNaTela('h1', 'Parabéns! Você acertou!');        
         let palavraTentativa = tentativas > 1 ? 'tentativas' : 'tentativa';
@@ -73,5 +82,9 @@ function reiniciarJogo() {
     tentativas = 1;
     exibirMensagemInicial();
     document.getElementById('reiniciar').setAttribute('disabled', 'true');
+
+    chuteAnteriores = [];
+    let historicoChutes = document.getElementById('historico-chutes');
+    historicoChutes.innerHTML = '';
 }
 

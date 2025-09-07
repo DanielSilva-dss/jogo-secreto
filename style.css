@@ -99,6 +99,12 @@ h1 {
     padding-bottom: 2rem;
 }
 
+#historico-chutes {
+    font-size: 22px;
+    margin-top: 1rem;
+    color: #a9d6ff;
+}
+
 p,
 button {
     font-family: 'Inter', sans-serif;
@@ -118,6 +124,12 @@ button:disabled {
     h1 {
         font-size: 50px;
     }
+
+    #historico-chutes {
+    font-size: 22px;
+    margin-top: 1rem;
+    color: #a9d6ff;
+}
 
     .container__botao {
         font-size: 16px;
