@@ -1,4 +1,4 @@
-// firebase-config.js (manter no .gitignore)
+// firebase-config.local.js - apenas para desenvolvimento
 window.firebaseConfig = {
     apiKey: "AIzaSyBBn-iq8g4EfbHUC9YyR9Qq8XVxVo_5KtM",
     authDomain: "jogo-numero-secreto-ranking.firebaseapp.com",
