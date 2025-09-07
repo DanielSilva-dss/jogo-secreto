@@ -1,11 +1,6 @@
 // app.js
 
 // --- CÓDIGO DE INICIALIZAÇÃO DO FIREBASE ---
-// --- IMPORTAÇÃO DA CONFIGURAÇÃO DO FIREBASE ---
-import { firebaseConfig } from './firebase-config.js';
-
-// Inicializar Firebase
-firebase.initializeApp(firebaseConfig);
 
 // Firestore
 const db = firebase.firestore();
@@ -55,7 +50,7 @@ function gerarNumeroAleatorio() {
 
 // Função para verificar o número secreto
 function verificarChute() {
-    let chute = document.querySelector("input").value;
+    let chute = document.getElementById("chute-input").value;
 
     if (!chute) {
         return;
