@@ -10,26 +10,30 @@ let rankingCol;
 // Inicialização do Firebase
 function inicializarFirebase() {
     try {
+        console.log("Iniciando Firebase...");
+        
         // Verifica se as configurações estão disponíveis
         if (!window.firebaseConfig || !window.firebaseConfig.apiKey) {
+            console.error("Configuração do Firebase não encontrada:", window.firebaseConfig);
             throw new Error("Configuração do Firebase não encontrada");
         }
+        
+        console.log("Configuração encontrada, inicializando...");
         
         // Verifica se o Firebase já foi inicializado
         if (!firebase.apps.length) {
             firebase.initializeApp(window.firebaseConfig);
+            console.log("Firebase inicializado com sucesso!");
         }
         
         db = firebase.firestore();
         rankingCol = db.collection("ranking");
-        console.log("Firebase inicializado com sucesso");
+        console.log("Firestore configurado com sucesso!");
         
     } catch (error) {
         console.error("Erro ao inicializar Firebase:", error);
-        // Modo offline - o jogo funciona sem o ranking
         alert("Modo offline ativado. O ranking não estará disponível.");
         
-        // Define as variáveis como null para evitar outros erros
         db = null;
         rankingCol = null;
     }
