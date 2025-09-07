@@ -34,7 +34,25 @@
     </div>
 
 
+    <script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
 
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+        apiKey: "AIzaSyAT0xzVpU1Rh29m5QFUf0D9ob4tTsloIe8",
+        authDomain: "jogo-numero-secreto-ranking.firebaseapp.com",
+        projectId: "jogo-numero-secreto-ranking",
+        storageBucket: "jogo-numero-secreto-ranking.firebasestorage.app",
+        messagingSenderId: "484416436213",
+        appId: "1:484416436213:web:a1f9dbea9529f44cde12bc"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    </script>
 
     <script src="app.js" defer></script>
 </body>
