@@ -141,10 +141,10 @@ function verificarChute() {
 // Função para salvar a pontuação no Firestore
 async function salvarPontuacao(nome, pontuacao) {
     // Se o Firebase não estiver disponível, não tenta salvar
-    if (!db || !rankingCol) {
+/*     if (!db || !rankingCol) {
         alert("Firebase não inicializado. Pontuação não salva. Modo offline ativo.");
         return;
-    }
+    } */
     
     try {
         const docRef = await rankingCol.add({
