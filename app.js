@@ -1,7 +1,7 @@
 // Variáveis globais
 let listaDeNumerosSorteados = [];
 let numeroMaximo = 100;
-let numeroSecreto = gerarNumeroAleatorio();
+let numeroSecreto;
 let tentativas = 1;
 let chuteAnteriores = [];
 let db;
@@ -10,18 +10,28 @@ let rankingCol;
 // Inicialização do Firebase
 function inicializarFirebase() {
     try {
+        // Verifica se as configurações estão disponíveis
+        if (!window.firebaseConfig || !window.firebaseConfig.apiKey) {
+            throw new Error("Configuração do Firebase não encontrada");
+        }
+        
         // Verifica se o Firebase já foi inicializado
         if (!firebase.apps.length) {
-            firebase.initializeApp(window.firebaseConfig || {});
+            firebase.initializeApp(window.firebaseConfig);
         }
         
         db = firebase.firestore();
         rankingCol = db.collection("ranking");
         console.log("Firebase inicializado com sucesso");
+        
     } catch (error) {
         console.error("Erro ao inicializar Firebase:", error);
         // Modo offline - o jogo funciona sem o ranking
         alert("Modo offline ativado. O ranking não estará disponível.");
+        
+        // Define as variáveis como null para evitar outros erros
+        db = null;
+        rankingCol = null;
     }
 }
 
@@ -35,8 +45,28 @@ function configurarResponsiveVoice() {
     }
 }
 
+// Função para gerar um número aleatório
+function gerarNumeroAleatorio() {
+    let numeroEscolhido = parseInt(Math.random() * numeroMaximo + 1);
+    let quantidadeDeElementosNaLista = listaDeNumerosSorteados.length;
+
+    if (quantidadeDeElementosNaLista == numeroMaximo) {
+        listaDeNumerosSorteados = [];
+    }
+
+    if (listaDeNumerosSorteados.includes(numeroEscolhido)) {
+        return gerarNumeroAleatorio();
+    } else {
+        listaDeNumerosSorteados.push(numeroEscolhido);
+        return numeroEscolhido;
+    }
+}
+
 // Inicializar quando a página carregar
 document.addEventListener('DOMContentLoaded', function() {
+    // AGORA inicializamos o número secreto depois que a função está declarada
+    numeroSecreto = gerarNumeroAleatorio();
+    
     inicializarFirebase();
     configurarResponsiveVoice();
     exibirMensagemInicial();
@@ -58,23 +88,6 @@ function exibirTextoNaTela(tag, texto) {
 function exibirMensagemInicial() {
     exibirTextoNaTela("h1", "Jogo do número secreto");
     exibirTextoNaTela("p", "Escolha um número entre 1 e 100");
-}
-
-// Função para gerar um número aleatório
-function gerarNumeroAleatorio() {
-    let numeroEscolhido = parseInt(Math.random() * numeroMaximo + 1);
-    let quantidadeDeElementosNaLista = listaDeNumerosSorteados.length;
-
-    if (quantidadeDeElementosNaLista == numeroMaximo) {
-        listaDeNumerosSorteados = [];
-    }
-
-    if (listaDeNumerosSorteados.includes(numeroEscolhido)) {
-        return gerarNumeroAleatorio();
-    } else {
-        listaDeNumerosSorteados.push(numeroEscolhido);
-        return numeroEscolhido;
-    }
 }
 
 // Função para verificar o número secreto
@@ -115,8 +128,8 @@ function verificarChute() {
 // Função para salvar a pontuação no Firestore
 async function salvarPontuacao(nome, pontuacao) {
     // Se o Firebase não estiver disponível, não tenta salvar
-    if (!db) {
-        alert("Firebase não inicializado. Pontuação não salva.");
+    if (!db || !rankingCol) {
+        alert("Firebase não inicializado. Pontuação não salva. Modo offline ativo.");
         return;
     }
     
@@ -130,7 +143,7 @@ async function salvarPontuacao(nome, pontuacao) {
         alert("Pontuação salva com sucesso no ranking global!");
     } catch (e) {
         console.error("Erro ao salvar pontuação: ", e);
-        alert("Houve um erro ao salvar sua pontuação.");
+        alert("Houve um erro ao salvar sua pontuação. Modo offline ativo.");
     }
 }
 
@@ -140,8 +153,8 @@ async function exibirRanking() {
     lista.innerHTML = "<li>Carregando ranking...</li>";
 
     // Se o Firebase não estiver disponível
-    if (!db) {
-        lista.innerHTML = "<li>Firebase não inicializado. Ranking indisponível.</li>";
+    if (!db || !rankingCol) {
+        lista.innerHTML = "<li>Firebase não inicializado. Ranking indisponível. Modo offline ativo.</li>";
         return;
     }
 
@@ -164,7 +177,7 @@ async function exibirRanking() {
         });
     } catch (error) {
         console.error("Erro ao buscar ranking: ", error);
-        lista.innerHTML = "<li>Erro ao carregar o ranking.</li>";
+        lista.innerHTML = "<li>Erro ao carregar o ranking. Modo offline ativo.</li>";
     }
 }
 
