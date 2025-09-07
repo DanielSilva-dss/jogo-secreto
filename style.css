@@ -208,3 +208,65 @@ h1 {
         padding: 1rem;
     }
 }
+
+/* ===== CONTROLE DE ZOOM E ESCALONAMENTO ===== */
+
+/* Controle de zoom e escalonamento */
+html {
+    font-size: 100%;
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    height: 100%;
+}
+
+body {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    height: 100%;
+    overflow-x: hidden;
+}
+
+/* Prevenir zoom em inputs no iOS */
+@media screen and (max-width: 768px) {
+    input[type="number"],
+    input[type="tel"],
+    input[type="text"] {
+        font-size: 16px !important; /* Previne zoom no iOS */
+    }
+}
+
+/* Garantir que containers não ultrapassem a viewport */
+.container {
+    overflow: hidden;
+}
+
+/* Melhorias de responsividade para mobile */
+@media screen and (max-width: 480px) {
+    .container {
+        width: 95%;
+        padding: 1rem;
+    }
+    
+    h1 {
+        font-size: 32px !important;
+    }
+    
+    .texto__paragrafo {
+        font-size: 18px !important;
+    }
+    
+    .container__botao {
+        font-size: 16px !important;
+        padding: 12px 20px !important;
+    }
+    
+    .container__input {
+        height: 60px !important;
+        font-size: 20px !important;
+    }
+}

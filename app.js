@@ -1,26 +1,57 @@
-// app.js
-
-// --- CÓDIGO DE INICIALIZAÇÃO DO FIREBASE ---
-
-// Firestore
-const db = firebase.firestore();
-const rankingCol = db.collection("ranking");
-
-// --- FIM: CÓDIGO DE INICIALIZAÇÃO DO FIREBASE ---
-
-// Variáveis
+// Variáveis globais
 let listaDeNumerosSorteados = [];
 let numeroMaximo = 100;
 let numeroSecreto = gerarNumeroAleatorio();
 let tentativas = 1;
 let chuteAnteriores = [];
+let db;
+let rankingCol;
 
+// Inicialização do Firebase
+function inicializarFirebase() {
+    try {
+        // Verifica se o Firebase já foi inicializado
+        if (!firebase.apps.length) {
+            firebase.initializeApp(window.firebaseConfig || {});
+        }
+        
+        db = firebase.firestore();
+        rankingCol = db.collection("ranking");
+        console.log("Firebase inicializado com sucesso");
+    } catch (error) {
+        console.error("Erro ao inicializar Firebase:", error);
+        // Modo offline - o jogo funciona sem o ranking
+        alert("Modo offline ativado. O ranking não estará disponível.");
+    }
+}
+
+// Configuração do ResponsiveVoice
+function configurarResponsiveVoice() {
+    try {
+        responsiveVoice.setDefaultVoice("Brazilian Portuguese Female");
+        responsiveVoice.enableWindowClickHook();
+    } catch (error) {
+        console.error("Erro ao configurar ResponsiveVoice:", error);
+    }
+}
+
+// Inicializar quando a página carregar
+document.addEventListener('DOMContentLoaded', function() {
+    inicializarFirebase();
+    configurarResponsiveVoice();
+    exibirMensagemInicial();
+});
 
 // Função para exibir texto na tela
 function exibirTextoNaTela(tag, texto) {
     let campo = document.querySelector(tag);
     campo.innerHTML = texto;
-    responsiveVoice.speak(texto, "Brazilian Portuguese Female", { rate: 1.2 });
+    
+    try {
+        responsiveVoice.speak(texto, "Brazilian Portuguese Female", { rate: 1.2 });
+    } catch (error) {
+        console.error("Erro ao usar voz:", error);
+    }
 }
 
 // Função para exibir a mensagem inicial
@@ -28,8 +59,6 @@ function exibirMensagemInicial() {
     exibirTextoNaTela("h1", "Jogo do número secreto");
     exibirTextoNaTela("p", "Escolha um número entre 1 e 100");
 }
-
-exibirMensagemInicial();
 
 // Função para gerar um número aleatório
 function gerarNumeroAleatorio() {
@@ -85,6 +114,12 @@ function verificarChute() {
 
 // Função para salvar a pontuação no Firestore
 async function salvarPontuacao(nome, pontuacao) {
+    // Se o Firebase não estiver disponível, não tenta salvar
+    if (!db) {
+        alert("Firebase não inicializado. Pontuação não salva.");
+        return;
+    }
+    
     try {
         const docRef = await rankingCol.add({
             nome: nome,
@@ -103,6 +138,12 @@ async function salvarPontuacao(nome, pontuacao) {
 async function exibirRanking() {
     const lista = document.getElementById("lista-ranking");
     lista.innerHTML = "<li>Carregando ranking...</li>";
+
+    // Se o Firebase não estiver disponível
+    if (!db) {
+        lista.innerHTML = "<li>Firebase não inicializado. Ranking indisponível.</li>";
+        return;
+    }
 
     try {
         const querySnapshot = await rankingCol.orderBy("pontuacao").limit(10).get();

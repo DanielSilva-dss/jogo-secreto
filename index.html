@@ -1,20 +1,16 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <script src="https://code.responsivevoice.org/responsivevoice.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@700&family=Inter:wght@400;700&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@700&family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <title>JS Game</title>
 </head>
-
 <body>
-
     <div class="container">
         <div class="container__conteudo">
             <div class="container__informacoes">
@@ -43,16 +39,33 @@
         </div>
     </div>
 
-    <!-- Firebase (versão compatível com o app.js) -->
-    <script src="https://www.gstatic.com/firebasejs/12.2.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore-compat.js"></script>
-    <script src="firebase-config.js"></script>
-    <script>
-        // Inicializar o Firebase
-        firebase.initializeApp(window.firebaseConfig);
-    </script>
+    <!-- Firebase (versão compatível) -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    
     <!-- JavaScript -->
-    <script src="app.js" defer></script>
-</body>
+    <script src="firebase-config.js"></script>
+    <script src="app.js"></script>
+    
+    <!-- Script para controle de viewport -->
+    <script>
+        // Controlar viewport para prevenir problemas de zoom
+        function setViewportScale() {
+            const viewport = document.querySelector('meta[name="viewport"]');
+            
+            if (window.visualViewport && window.visualViewport.scale !== 1) {
+                viewport.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no');
+            } else {
+                viewport.setAttribute('content', 'width=device-width, initial-scale=1.0');
+            }
+        }
 
+        // Executar quando a página carregar e quando houver redimensionamento
+        window.addEventListener('load', setViewportScale);
+        window.addEventListener('resize', setViewportScale);
+        if (window.visualViewport) {
+            window.visualViewport.addEventListener('resize', setViewportScale);
+        }
+    </script>
+</body>
 </html>
