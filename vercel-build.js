@@ -1,4 +1,3 @@
-// vercel-build.js
 const fs = require("fs");
 
 const config = {
@@ -10,8 +9,14 @@ const config = {
   appId: process.env.FIREBASE_APP_ID,
 };
 
+if (!config.apiKey) {
+  console.error("❌ ERRO: Variáveis do Firebase não foram carregadas.");
+  process.exit(1);
+}
+
 const fileContent = `window.firebaseConfig = ${JSON.stringify(config, null, 2)};`;
 
+fs.mkdirSync("./public", { recursive: true });
 fs.writeFileSync("./public/firebase-config.js", fileContent);
 
 console.log("✅ firebase-config.js gerado com sucesso!");
