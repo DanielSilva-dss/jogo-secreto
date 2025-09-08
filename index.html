@@ -1,73 +1,53 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <script src="https://code.responsivevoice.org/responsivevoice.js"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@700&family=Inter:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
-    <title>JS Game</title>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <script src="https://code.responsivevoice.org/responsivevoice.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@700&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <title>JS Game</title>
 </head>
 <body>
-    <div class="container">
-        <div class="container__conteudo">
-            <div class="container__informacoes">
-                <div class="container__texto">
-                    <h1></h1>
-                    <p class="texto__paragrafo"></p>
-                    <p id="historico-chutes" class="texto__paragrafo"></p>
-                </div>
-                <input id="chute-input" type="number" min="1" max="100" class="container__input">
-                <div class="chute container__botoes">
-                    <button onclick="verificarChute()" class="container__botao">Chutar</button>
-                    <button onclick="abrirRanking()" id="ranking" class="container__botao">Ranking</button>
-                    <button onclick="reiniciarJogo()" id="reiniciar" class="container__botao" disabled>Novo jogo</button>
-                </div>
-            </div>
-            <img src="./img/ia.png" alt="Uma pessoa olhando para a esquerda" class="container__imagem-pessoa" />
+  <div class="container">
+    <div class="container__conteudo">
+      <div class="container__informacoes">
+        <div class="container__texto">
+          <h1></h1>
+          <p class="texto__paragrafo"></p>
+          <p id="historico-chutes" class="texto__paragrafo"></p>
         </div>
-    </div>
-
-    <!-- Modal do Ranking -->
-    <div id="modal-ranking" class="modal-overlay" style="display: none;">
-        <div class="modal-conteudo">
-            <h2>🏆 Top 10 Jogadores 🏆</h2>
-            <ol id="lista-ranking"></ol>
-            <button onclick="fecharRanking()">Fechar</button>
+        <input id="chute-input" type="number" min="1" max="100" class="container__input">
+        <div class="chute container__botoes">
+          <button onclick="verificarChute()" class="container__botao">Chutar</button>
+          <button onclick="abrirRanking()" id="ranking" class="container__botao">Ranking</button>
+          <button onclick="reiniciarJogo()" id="reiniciar" class="container__botao" disabled>Novo jogo</button>
         </div>
+      </div>
+      <img src="./img/ia.png" alt="Uma pessoa olhando para a esquerda" class="container__imagem-pessoa" />
     </div>
+  </div>
 
-    <!-- Firebase (versão compatível) -->
-    <script src="https://www.gstatic.com/firebasejs/12.2.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore-compat.js"></script>
-    
-    <!-- Configuração do Firebase (arquivo externo, não versionado) -->
-    <script src="/firebase-config.js"></script>
-    
-    <!-- JavaScript -->
-    <script src="app.js"></script>
-    
-    <!-- Script para controle de viewport -->
-    <script>
-        // Controlar viewport para prevenir problemas de zoom
-        function setViewportScale() {
-            const viewport = document.querySelector('meta[name="viewport"]');
-            
-            if (window.visualViewport && window.visualViewport.scale !== 1) {
-                viewport.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no');
-            } else {
-                viewport.setAttribute('content', 'width=device-width, initial-scale=1.0');
-            }
-        }
+  <!-- Modal do Ranking -->
+  <div id="modal-ranking" class="modal-overlay" style="display: none;">
+    <div class="modal-conteudo">
+      <h2>🏆 Top 10 Jogadores 🏆</h2>
+      <ol id="lista-ranking"></ol>
+      <button onclick="fecharRanking()">Fechar</button>
+    </div>
+  </div>
 
-        // Executar quando a página carregar e quando houver redimensionamento
-        window.addEventListener('load', setViewportScale);
-        window.addEventListener('resize', setViewportScale);
-        if (window.visualViewport) {
-            window.visualViewport.addEventListener('resize', setViewportScale);
-        }
-    </script>
+  <!-- Firebase (SDK compatível) -->
+  <script src="https://www.gstatic.com/firebasejs/12.2.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore-compat.js"></script>
+
+  <!-- Configuração do Firebase (vai ser gerado no deploy) -->
+  <script src="/firebase-config.js"></script>
+
+  <!-- Lógica do jogo -->
+  <script src="app.js"></script>
 </body>
 </html>

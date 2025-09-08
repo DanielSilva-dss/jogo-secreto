@@ -1,3 +1,2 @@
-# Firebase config
-firebase-config.js
-
+# ignore a pastas node_modules e firebase-config.js
+public/firebase-config.js
