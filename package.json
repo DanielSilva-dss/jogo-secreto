@@ -1,5 +1,5 @@
 {
-  "name": "jogo-numero-secreto",
+  "name": "jogo-secreto",
   "version": "1.0.0",
   "scripts": {
     "build": "node vercel-build.js"
